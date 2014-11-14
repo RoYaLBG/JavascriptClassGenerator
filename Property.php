@@ -15,7 +15,12 @@ class Property
      */
     private $type;
 
-    public function __construct($name, $type)
+    /**
+     * @var array
+     */
+    private $range = [];
+
+    public function __construct($name, $type, $range = [])
     {
         if (!in_array($type,
             [
@@ -27,6 +32,7 @@ class Property
 
         $this->name = $name;
         $this->type = $type;
+        $this->range = $range;
     }
 
     /**
@@ -96,8 +102,9 @@ class Property
                 $validation .= "if (!this.isNumber(" . $this->getName() . ")) { \n\t\t\t";
                 $validation .= "throw new Error('The field should be numeric');\n\t\t";
                 $validation .= "}\n\t\t";
+                $validation .= $this->generateRangeValidation();
                 break;
-            case Types::TYPE_NUMBER:
+            case Types::TYPE_BOOLEAN:
                 $validation .= "if (!typeof (" . $this->getName() . ") != 'boolean') { \n\t\t\t";
                 $validation .= "throw new Error('The field should be either true or false');\n\t\t";
                 $validation .= "}\n\t\t";
@@ -105,6 +112,19 @@ class Property
             default:
                 break;
         endswitch;
+
+        return $validation;
+    }
+
+    private function generateRangeValidation()
+    {
+        $validation = "";
+
+        if (!empty($this->range)) {
+            $validation = "if (" . $this->getName() . " < " . $this->range[0] . " || " . $this->getName() . " > " . $this->range[1] . ") {\n\t\t\t";
+            $validation .= "throw new Error('The field is out of range');\n\t\t";
+            $validation .= "}\n\t\t";
+        }
 
         return $validation;
     }

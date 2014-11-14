@@ -19,12 +19,17 @@
     <tr class="properties">
         <td>
             <input type="text" class="property" />
-            <select class="type">
+            <select class="type" onchange="toggleRange(this)">
                 <option>--- Select type ---</option>
                 <option value="1">String</option>
                 <option value="2">Number</option>
                 <option value="3">Boolean</option>
             </select>
+            <span class="range" style="display: none">
+                From <input type="text" class="from" />
+                To <input type="text" class="to" />
+            </span>
+            [ <a href="#" onclick="$(this).parent().remove()"><b>Remove</b></a> ]
         </td>
     </tr>
     <tr>
@@ -50,14 +55,25 @@
     </tr>
 </table>
 <script>
+    function toggleRange(el) {
+        if($(el).val() == 2) {
+            $(el).parent().children('.range').show();
+        } else {
+            $(el).parent().children('.range').hide();
+        }
+    }
+
     $("#addProperty").click(function() {
         var el = $(".properties" ).first().clone().insertAfter(".properties");
         $(el).removeClass('properties');
+        $(el).children().first().children(".range").hide();
     });
 
     $("#generate").click(function() {
         var properties = [];
         var types = [];
+        var from = [];
+        var to = [];
 
         $(".property").each(function() {
            properties.push($(this).val());
@@ -67,11 +83,21 @@
             types.push($(this).val());
         });
 
+        $(".from").each(function() {
+            from.push($(this).val());
+        });
+
+        $(".to").each(function() {
+            to.push($(this).val());
+        });
+
         $.post( "generate.php",
             {
                 'className': $("#className").val(),
                 'property[]': properties,
                 'type[]': types,
+                'from[]': from,
+                'to[]': to,
                 'isAbstract': $("#abstract").is(":checked"),
                 'baseClass': $("#baseClass").val()
             }
