@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Class name</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="className" /></td>
+    </tr>
+    <tr>
+        <td>Properties <b>[ <a href="#" id="addProperty">Add</a> ]</b></td>
+    </tr>
+    <tr class="properties">
+        <td>
+            <input type="text" class="property" />
+            <select class="type">
+                <option>--- Select type ---</option>
+                <option value="1">String</option>
+                <option value="2">Number</option>
+                <option value="3">Boolean</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Abstract?</td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" id="abstract"/></td>
+    </tr>
+    <tr>
+        <td>Parent class?</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="baseClass" /></td>
+    </tr>
+    <tr>
+        <td>Output:</td>
+    </tr>
+    <tr>
+        <td><textarea id="output" rows="40" cols="160"></textarea></td>
+    </tr>
+    <tr>
+        <td><button id="generate">Generate</button></td>
+    </tr>
+</table>
+<script>
+    $("#addProperty").click(function() {
+        var el = $(".properties" ).first().clone().insertAfter(".properties");
+        $(el).removeClass('properties');
+    });
+
+    $("#generate").click(function() {
+        var properties = [];
+        var types = [];
+
+        $(".property").each(function() {
+           properties.push($(this).val());
+        });
+
+        $(".type").each(function() {
+            types.push($(this).val());
+        });
+
+        $.post( "generate.php",
+            {
+                'className': $("#className").val(),
+                'property[]': properties,
+                'type[]': types,
+                'isAbstract': $("#abstract").is(":checked"),
+                'baseClass': $("#baseClass").val()
+            }
+        )
+        .done(function(data) {
+            $("#output").text(data);
+        });
+    });
+</script>
+
+
+</body>
+</html>
