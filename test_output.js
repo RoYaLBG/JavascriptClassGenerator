@@ -103,7 +103,7 @@ var Dessert = (function () {
     }
 
     Dessert.prototype.toString = function() {
-        return 'Name: ' + this.getName + 'Price: ' + this.getPrice + 'Calories: ' + this.getCalories + 'QuantityPerServing: ' + this.getQuantityPerServing + 'TimeToPrepare: ' + this.getTimeToPrepare + 'IsVegan: ' + this.getIsVegan + 'HasSugar: ' + this.getHasSugar;
+        return 'Name: ' + this.getName() + 'Price: ' + this.getPrice() + 'Calories: ' + this.getCalories() + 'QuantityPerServing: ' + this.getQuantityPerServing() + 'TimeToPrepare: ' + this.getTimeToPrepare() + 'IsVegan: ' + this.getIsVegan() + 'HasSugar: ' + this.getHasSugar();
     };
 
     return Dessert;

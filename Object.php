@@ -151,7 +151,7 @@ class Object
         $toString .= "return ";
 
         foreach ($this->getProperties() as $property) {
-            $toString .= "'" . ucfirst($property->getName()) . ": ' + this.get" . ucfirst($property->getName()) . " + ";
+            $toString .= "'" . ucfirst($property->getName()) . ": ' + this.get" . ucfirst($property->getName()) . "() + ";
         }
 
         $toString = rtrim($toString, "+ ");
