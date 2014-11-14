@@ -105,7 +105,7 @@ class Property
                 $validation .= $this->generateRangeValidation();
                 break;
             case Types::TYPE_BOOLEAN:
-                $validation .= "if (!typeof (" . $this->getName() . ") != 'boolean') { \n\t\t\t";
+                $validation .= "if (typeof (" . $this->getName() . ") != 'boolean') { \n\t\t\t";
                 $validation .= "throw new Error('The field should be either true or false');\n\t\t";
                 $validation .= "}\n\t\t";
                 break;
